@@ -1,8 +1,9 @@
 import React from "react";
+import NewPrompt from "../../components/NewPrompt";
 
 const ChatPage: React.FC = () => {
   return (
-    <div className="h-full flex flex-col items-center ">
+    <div className="h-full flex flex-col items-center relative ">
       <div className="flex-1 overflow-auto w-full flex justify-center [&::-webkit-scrollbar]:hidden">
         <div className="w-1/2 flex flex-col">
           <div className="p-5">bot message</div>
@@ -52,6 +53,7 @@ const ChatPage: React.FC = () => {
           <div className="p-5 bg-[#2c2937] rounded-[20px] max-w-[80%] self-end">
             User message
           </div>
+          <NewPrompt />
         </div>
       </div>
     </div>
