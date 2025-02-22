@@ -13,14 +13,14 @@ function App() {
     <>
       <Routes>
         <Route element={<RootLayout />}>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/sign-in/*" element={<SignInPage />} />
-        <Route path="/sign-up/*" element={<SignUpPage />} />
+          <Route path="/" element={<Homepage />} />
+          <Route path="/sign-in/*" element={<SignInPage />} />
+          <Route path="/sign-up/*" element={<SignUpPage />} />
 
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/chats/:id" element={<ChatPage />} />
-        </Route>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/chats/:id" element={<ChatPage />} />
+          </Route>
         </Route>
       </Routes>
     </>

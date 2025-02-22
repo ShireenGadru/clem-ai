@@ -1,6 +1,37 @@
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import React, { FormEvent } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
+const APIendpoint = import.meta.env.VITE_API_URL;
 const Dashboard: React.FC = () => {
+  const queryClient = new QueryClient();
+  const navigate = useNavigate();
+  const mutation = useMutation({
+    mutationFn: async (text) => {
+      return await fetch(`${APIendpoint}/api/chats`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
+    },
+    onSuccess: (id) => {
+      queryClient.invalidateQueries({ queryKey: ["userChats"] });
+      navigate(`/dashboard/chats${id}`);
+    },
+  });
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const text = e.target.text?.value;
+    if (!text) return;
+    mutation.mutate(text);
+  };
+
   return (
     <div className="h-full flex flex-col items-center ">
       <div className="flex-1 flex flex-col items-center justify-center w-1/2 gap-12">
@@ -29,9 +60,11 @@ const Dashboard: React.FC = () => {
         <form
           action=""
           className="w-full h-full flex items-center justify-between gap-5 mb-2.5"
+          onSubmit={handleSubmit}
         >
           <input
             type="text"
+            name="text"
             placeholder="Ask me anything..."
             className="flex-1 p-5 bg-transparent border-none outline-none text-[#ececec]"
           />

@@ -1,7 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
+const APIendpoint = import.meta.env.VITE_API_URL;
 
 const ChatList: React.FC = () => {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["userChats"],
+    queryFn: () =>
+      fetch(`${APIendpoint}/api/userchats`, {
+        credentials: "include",
+      }).then((res) => res.json()),
+  });
+
   return (
     <div className="flex flex-col h-full">
       <span className="font-semibold text-[10px] mb-2.5 ">DASHBOARD</span>
@@ -12,48 +23,29 @@ const ChatList: React.FC = () => {
       <hr className="border-none h-0.5 bg-[#ddd] opacity-[0.1] rounded-sm my-5" />
       <span className="font-semibold text-[10px] mb-2.5 ">RECENT CHATS</span>
       <div className="flex flex-col overflow-auto ">
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        <Link to="/" className="p-2.5 rounded-[10px] hover:bg-[#2c2937]">
-          My Chat title
-        </Link>
-        
+        {isLoading && <div>Loading....</div>}
+        {error && <div>Somethign went wrong</div>}
+
+        {data &&
+          data?.chats?.map((chat: any) => (
+            <Link
+              to={`/dashboard/chats/${chat._id}`}
+              className="p-2.5 rounded-[10px] hover:bg-[#2c2937]"
+              key={chat?._id}
+            >
+              {chat?.title}
+            </Link>
+          ))}
       </div>
       <hr className="border-none h-0.5 bg-[#ddd] opacity-[0.1] rounded-sm my-5" />
 
       <div className="mt-auto flex items-center gap-2.5 text-xs">
-        <img src="/logo.png" alt="" className="w-6 h-6"/>
+        <img src="/logo.png" alt="" className="w-6 h-6" />
         <div className="flex flex-col">
           <span className="font-semibold">Upgrade to CLEM AI Pro</span>
-          <span className="text-[#888]">Get unlimited access to all features</span>
+          <span className="text-[#888]">
+            Get unlimited access to all features
+          </span>
         </div>
       </div>
     </div>
