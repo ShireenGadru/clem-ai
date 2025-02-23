@@ -1,12 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import Homepage from "./routes/homepage/Homepage";
-import SignInPage from "./routes/signInPage/SignInPage";
-import SignUpPage from "./routes/signUpPage/SignUpPage";
-import Dashboard from "./routes/dashboardPage/Dashboard";
-import ChatPage from "./routes/chatPage/ChatPage";
-import RootLayout from "./layouts/rootLayout/RootLayout";
-import DashboardLayout from "./layouts/dashboardLayout/DashboardLayout";
+import Homepage from "./routes/Homepage";
+import SignInPage from "./routes/SignInPage";
+import SignUpPage from "./routes/SignUpPage";
+import Dashboard from "./routes/Dashboard";
+import ChatPage from "./routes/ChatPage";
+import RootLayout from "./layouts/RootLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 function App() {
   return (

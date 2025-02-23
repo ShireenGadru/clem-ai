@@ -1,16 +1,20 @@
 import React from "react";
-import NewPrompt from "../../components/NewPrompt";
+import NewPrompt from "../components/NewPrompt";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import Markdown from "react-markdown";
 import { IKImage } from "imagekitio-react";
+import { IHistory } from "../types/data.types";
 
 const APIendpoint = import.meta.env.VITE_API_URL;
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 
 const ChatPage: React.FC = () => {
+  console.log("re render");
+
   const path = useLocation().pathname;
   const chatId = path.split("/").pop();
+  console.log(chatId);
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["chat", chatId],
@@ -19,8 +23,6 @@ const ChatPage: React.FC = () => {
         credentials: "include",
       }).then((res) => res.json()),
   });
-
-  console.log(data);
 
   const userCN = "p-5 bg-[#2c2937] rounded-[20px] max-w-[80%] self-end";
 
@@ -31,8 +33,8 @@ const ChatPage: React.FC = () => {
           {isLoading && <div>Loading....</div>}
           {error && <div>Somethign went wrong</div>}
           {data &&
-            data?.chat?.history?.map((chat, index) => (
-              <>
+            data?.chat?.history?.map((chat: IHistory, index: number) => (
+              <div key={index} className="w-full flex flex-col">
                 {chat?.img && (
                   <IKImage
                     urlEndpoint={urlEndpoint}
@@ -49,10 +51,10 @@ const ChatPage: React.FC = () => {
                 >
                   <Markdown>{chat?.parts?.[0]?.text}</Markdown>
                 </div>
-              </>
+              </div>
             ))}
 
-          <NewPrompt data={data} />
+          {data && <NewPrompt data={data} />}
         </div>
       </div>
     </div>

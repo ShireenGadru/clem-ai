@@ -1,15 +1,14 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { FormEvent } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 const APIendpoint = import.meta.env.VITE_API_URL;
 const Dashboard: React.FC = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: async (text) => {
-      return await fetch(`${APIendpoint}/api/chats`, {
+      const response = await fetch(`${APIendpoint}/api/chats`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -17,17 +16,19 @@ const Dashboard: React.FC = () => {
         },
         body: JSON.stringify({ text }),
       });
+      const data = await response.json();
+      return data;
     },
-    onSuccess: (id) => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["userChats"] });
-      navigate(`/dashboard/chats${id}`);
+      navigate(`/dashboard/chats/${data?.data?.chatId}`);
     },
   });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    const text = e.target.text?.value;
+    const formElement = e.target as HTMLFormElement;
+    const text = formElement?.text?.value;
     if (!text) return;
     mutation.mutate(text);
   };
@@ -65,7 +66,7 @@ const Dashboard: React.FC = () => {
           <input
             type="text"
             name="text"
-            placeholder="Ask me anything..."
+            placeholder="Ask me anything... ))))))"
             className="flex-1 p-5 bg-transparent border-none outline-none text-[#ececec]"
           />
           <button className="bg-[#605e68] mr-5 p-2.5 cursor-pointer border-none rounded-full">

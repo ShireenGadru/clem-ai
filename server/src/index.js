@@ -133,7 +133,7 @@ app.get("/api/userchats", requireAuth(), async (req, res) => {
     if (userChats) {
       res.status(200).json({
         success: true,
-        chats: userChats[0].chats,
+        chats: userChats[0]?.chats,
         message: "Chat fetched successfully",
       });
     } else {

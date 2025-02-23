@@ -32,7 +32,7 @@ interface UploadProps {
 
 const Upload: React.FC<UploadProps> = (props) => {
   const { setImg } = props;
-  const IKUploadRef = useRef(null);
+  const IKUploadRef = useRef<HTMLInputElement | null>(null);
   const onError = (err: any) => {
     console.log("Error", err);
   };
@@ -57,13 +57,17 @@ const Upload: React.FC<UploadProps> = (props) => {
         isLoading: true,
         aiData: {
           inlineData: {
-            data: reader?.result?.split(",")[1],
+            data: (reader?.result as string).split(",")[1],
             mimeType: file?.type,
           },
         },
       }));
     };
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(file);
+  };
+
+  const handleUpload = () => {
+    if (IKUploadRef.current) IKUploadRef.current.click();
   };
   return (
     <IKContext
@@ -85,7 +89,7 @@ const Upload: React.FC<UploadProps> = (props) => {
       {
         <label
           className="rounded-full border-none bg-[#605e68] p-2.5 flex items-center justify-center cursor-pointer"
-          onClick={() => IKUploadRef.current.click()}
+          onClick={handleUpload}
         >
           <img src="/attachment.png" alt="" className="w-4 h-4 " />
         </label>

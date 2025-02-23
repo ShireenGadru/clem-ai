@@ -4,8 +4,10 @@ import { IKImage } from "imagekitio-react";
 import model from "../lib/gemini";
 import Markdown from "react-markdown";
 import { Part } from "@google/generative-ai";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const APIendpoint = import.meta.env.VITE_API_URL;
@@ -24,8 +26,6 @@ interface INewPromptProps {
 }
 
 const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
-  console.log(data);
-
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [img, setImg] = useState<ImgData>({
@@ -49,14 +49,15 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   });
 
   const endRef = useRef<HTMLDivElement | null>(null);
-  const formRef = useRef(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     if (endRef?.current) endRef.current.scrollIntoView({ behavior: "smooth" });
-    console.log("here");
+    console.log(endRef.current);
+    
   }, [data, question, answer, img]);
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {
       return await fetch(`${APIendpoint}/api/chats/${data?.chat?._id}`, {
@@ -73,10 +74,10 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
       });
     },
     onSuccess: () => {
+      console.log(data?.chat?._id);
       queryClient
         .invalidateQueries({ queryKey: ["chat", data?.chat?._id] })
         .then(() => {
-          formRef.current.reset();
           setQuestion("");
           setAnswer("");
           setImg({
@@ -93,7 +94,14 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   });
 
   const add = async (prompt: string, isInitial = false) => {
-    if (!isInitial) setQuestion(prompt);
+    if (!isInitial) {
+      setQuestion(prompt);
+    }
+
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+
     try {
       const result = await chat.sendMessageStream(
         Object.entries(img.aiData).length ? [img.aiData, prompt] : prompt
@@ -112,7 +120,8 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const text = e.target.text?.value;
+    const formElement = e.target as HTMLFormElement;
+    const text = formElement?.text?.value;
     if (!text) return;
     add(text);
   };
@@ -155,12 +164,6 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
         onSubmit={handleSubmit}
         ref={formRef}
       >
-        {/* <label
-          htmlFor="file"
-          className="rounded-full border-none bg-[#605e68] p-2.5 flex items-center justify-center cursor-pointer"
-        >
-          <img src="/attachment.png" alt="" className="w-4 h-4 " />
-        </label> */}
         <Upload setImg={setImg} />
         <input type="file" multiple={false} id="file" hidden />
         <input
