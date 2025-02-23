@@ -7,7 +7,9 @@ const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
+
 const queryClient = new QueryClient();
+
 const RootLayout = () => {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
@@ -19,7 +21,6 @@ const RootLayout = () => {
               <span>CLEM AI</span>
             </Link>
             <div>
-              {" "}
               <SignedIn>
                 <UserButton />
               </SignedIn>

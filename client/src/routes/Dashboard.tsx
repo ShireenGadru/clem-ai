@@ -3,10 +3,11 @@ import React, { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 const APIendpoint = import.meta.env.VITE_API_URL;
+
 const Dashboard: React.FC = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async (text) => {
       const response = await fetch(`${APIendpoint}/api/chats`, {
         method: "POST",
@@ -16,8 +17,7 @@ const Dashboard: React.FC = () => {
         },
         body: JSON.stringify({ text }),
       });
-      const data = await response.json();
-      return data;
+      return await response.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["userChats"] });
@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
     const formElement = e.target as HTMLFormElement;
     const text = formElement?.text?.value;
     if (!text) return;
-    mutation.mutate(text);
+    mutate(text);
   };
 
   return (

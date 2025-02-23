@@ -28,7 +28,6 @@ const storeNewChat = asyncHandler(async (req, res) => {
   const { userId } = getAuth(req);
   // Use Clerk's JavaScript Backend SDK to get the user's User object
   const user = await clerkClient.users.getUser(userId);
-  // console.log(userId, user);
 
   try {
     const newChat = new Chat({
@@ -118,7 +117,6 @@ const updateChatHistory = asyncHandler(async (req, res) => {
   try {
     const { userId } = getAuth(req);
     const { question, answer, img } = req.body;
-    console.log({ question, answer, img });
 
     const userItem = {
       role: "user",
@@ -139,7 +137,6 @@ const updateChatHistory = asyncHandler(async (req, res) => {
     };
 
     const newItems = [...(question ? [userItem] : []), botItem];
-    console.log(newItems);
 
     const updatedChat = await Chat.updateOne(
       { _id: req.params.id, userId },

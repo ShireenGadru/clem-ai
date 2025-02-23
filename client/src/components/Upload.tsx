@@ -1,36 +1,12 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, { useRef } from "react";
 import { IKContext, IKUpload } from "imagekitio-react";
-import { ImgData } from "./NewPrompt";
+import { authenticator } from "../lib/IKAuth";
+import { IUploadProps } from "../types/data.types";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
 
-const authenticator = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/api/upload");
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Request failed with status ${response.status}: ${errorText}`
-      );
-    }
-
-    const data = await response.json();
-    const { signature, expire, token } = data;
-    return { signature, expire, token };
-  } catch (error) {
-    throw new Error(
-      `Authentication request failed: ${(error as Error).message}`
-    );
-  }
-};
-
-interface UploadProps {
-  setImg: Dispatch<SetStateAction<ImgData>>;
-}
-
-const Upload: React.FC<UploadProps> = (props) => {
+const Upload: React.FC<IUploadProps> = (props) => {
   const { setImg } = props;
   const IKUploadRef = useRef<HTMLInputElement | null>(null);
   const onError = (err: any) => {
@@ -69,6 +45,7 @@ const Upload: React.FC<UploadProps> = (props) => {
   const handleUpload = () => {
     if (IKUploadRef.current) IKUploadRef.current.click();
   };
+
   return (
     <IKContext
       publicKey={publicKey}

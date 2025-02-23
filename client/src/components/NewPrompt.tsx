@@ -3,31 +3,15 @@ import Upload from "./Upload";
 import { IKImage } from "imagekitio-react";
 import model from "../lib/gemini";
 import Markdown from "react-markdown";
-import { Part } from "@google/generative-ai";
-import {
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ImgData, INewPromptProps } from "../types/data.types";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const APIendpoint = import.meta.env.VITE_API_URL;
 
-export interface ImgData {
-  isLoading: boolean;
-  error: string;
-  dbData: {
-    filePath?: string;
-  };
-  aiData: string | Part;
-}
-
-interface INewPromptProps {
-  data: any;
-}
-
 const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [question, setQuestion] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
   const [img, setImg] = useState<ImgData>({
     isLoading: false,
     error: "",
@@ -53,14 +37,12 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
 
   useEffect(() => {
     if (endRef?.current) endRef.current.scrollIntoView({ behavior: "smooth" });
-    console.log(endRef.current);
-    
   }, [data, question, answer, img]);
 
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async () => {
-      return await fetch(`${APIendpoint}/api/chats/${data?.data?._id}`, {
+      return await fetch(`${APIendpoint}/api/chats/${data?._id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -71,12 +53,11 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
           answer,
           img: img.dbData?.filePath || undefined,
         }),
-      });
+      }).then((res) => res.json());
     },
     onSuccess: () => {
-      console.log(data?.data?._id);
       queryClient
-        .invalidateQueries({ queryKey: ["chat", data?.data?._id] })
+        .invalidateQueries({ queryKey: ["chat", data?._id] })
         .then(() => {
           setQuestion("");
           setAnswer("");
@@ -112,7 +93,7 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
         compelteResponse += chunkText;
         setAnswer(compelteResponse);
       }
-      mutation.mutate();
+      mutate();
     } catch (error) {
       console.error(error);
     }
@@ -127,14 +108,13 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   };
 
   useEffect(() => {
-    if (data?.data?.history?.length === 1) {
-      add(data.data.history[0].parts[0].text, true);
+    if (data?.history?.length === 1) {
+      add(data.history[0].parts[0].text, true);
     }
   }, []);
 
   return (
     <>
-      {/* add new chat  */}
       {img.isLoading && "Loading...."}
       {img.dbData?.filePath && (
         <IKImage

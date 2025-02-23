@@ -5,7 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 const APIendpoint = import.meta.env.VITE_API_URL;
 
 const ChatList: React.FC = () => {
-  const { isLoading, error, data } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: response,
+  } = useQuery({
     queryKey: ["userChats"],
     queryFn: () =>
       fetch(`${APIendpoint}/api/userchats`, {
@@ -13,8 +17,6 @@ const ChatList: React.FC = () => {
       }).then((res) => res.json()),
   });
 
-  console.log(data);
-  
   return (
     <div className="flex flex-col h-full">
       <span className="font-semibold text-[10px] mb-2.5 ">DASHBOARD</span>
@@ -28,8 +30,8 @@ const ChatList: React.FC = () => {
         {isLoading && <div>Loading....</div>}
         {error && <div>Somethign went wrong</div>}
 
-        {data &&
-          data?.data?.map((chat: any) => (
+        {response &&
+          response?.data?.map((chat: any) => (
             <Link
               to={`/dashboard/chats/${chat._id}`}
               className="p-2.5 rounded-[10px] hover:bg-[#2c2937]"
