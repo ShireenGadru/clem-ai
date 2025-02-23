@@ -33,7 +33,7 @@ const ChatPage: React.FC = () => {
           {isLoading && <div>Loading....</div>}
           {error && <div>Somethign went wrong</div>}
           {data &&
-            data?.chat?.history?.map((chat: IHistory, index: number) => (
+            data?.data?.history?.map((chat: IHistory, index: number) => (
               <div key={index} className="w-full flex flex-col">
                 {chat?.img && (
                   <IKImage

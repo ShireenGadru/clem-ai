@@ -60,7 +60,7 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async () => {
-      return await fetch(`${APIendpoint}/api/chats/${data?.chat?._id}`, {
+      return await fetch(`${APIendpoint}/api/chats/${data?.data?._id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -74,9 +74,9 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
       });
     },
     onSuccess: () => {
-      console.log(data?.chat?._id);
+      console.log(data?.data?._id);
       queryClient
-        .invalidateQueries({ queryKey: ["chat", data?.chat?._id] })
+        .invalidateQueries({ queryKey: ["chat", data?.data?._id] })
         .then(() => {
           setQuestion("");
           setAnswer("");
@@ -127,8 +127,8 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   };
 
   useEffect(() => {
-    if (data?.chat?.history?.length === 1) {
-      add(data.chat.history[0].parts[0].text, true);
+    if (data?.data?.history?.length === 1) {
+      add(data.data.history[0].parts[0].text, true);
     }
   }, []);
 

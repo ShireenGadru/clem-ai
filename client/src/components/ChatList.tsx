@@ -13,6 +13,8 @@ const ChatList: React.FC = () => {
       }).then((res) => res.json()),
   });
 
+  console.log(data);
+  
   return (
     <div className="flex flex-col h-full">
       <span className="font-semibold text-[10px] mb-2.5 ">DASHBOARD</span>
@@ -27,7 +29,7 @@ const ChatList: React.FC = () => {
         {error && <div>Somethign went wrong</div>}
 
         {data &&
-          data?.chats?.map((chat: any) => (
+          data?.data?.map((chat: any) => (
             <Link
               to={`/dashboard/chats/${chat._id}`}
               className="p-2.5 rounded-[10px] hover:bg-[#2c2937]"
