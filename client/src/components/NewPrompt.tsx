@@ -12,6 +12,7 @@ const APIendpoint = import.meta.env.VITE_API_URL;
 const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   const [question, setQuestion] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
   const [img, setImg] = useState<ImgData>({
     isLoading: false,
     error: "",
@@ -52,6 +53,7 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
           question: question || undefined,
           answer,
           img: img.dbData?.filePath || undefined,
+          category,
         }),
       }).then((res) => res.json());
     },
@@ -87,11 +89,19 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
       const result = await chat.sendMessageStream(
         Object.entries(img.aiData).length ? [img.aiData, prompt] : prompt
       );
-      let compelteResponse = "";
+      let completeResponse = "";
+      let extractedCategory = "";
       for await (const chunk of result.stream) {
         const chunkText = chunk.text();
-        compelteResponse += chunkText;
-        setAnswer(compelteResponse);
+        completeResponse += chunkText;
+        const categoryMatch = completeResponse.match(/<<<(.*?)>>>/);
+        if (categoryMatch) {
+          extractedCategory = categoryMatch[1];
+          completeResponse = completeResponse.replace(/<<<.*?>>>/, "");
+        }
+        setAnswer(completeResponse);
+        const finalCategory = extractedCategory ?? "other";
+        setCategory(finalCategory);
       }
       mutate();
     } catch (error) {
@@ -114,7 +124,7 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   }, []);
 
   return (
-    <>
+    <div>
       {img.isLoading && "Loading...."}
       {img.dbData?.filePath && (
         <IKImage
@@ -140,7 +150,7 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
 
       <form
         action=""
-        className="w-1/2 absolute bottom-0 bg-[#2c2937] rounded-[20px] flex  items-center gap-5 px-5"
+        className="w-1/2 mb-5 absolute bottom-0 bg-[#131619] rounded-[20px] flex items-center gap-5 px-5 border border-white/40"
         onSubmit={handleSubmit}
         ref={formRef}
       >
@@ -156,7 +166,7 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
           <img src="/arrow.png" alt="" className="w-4 h-4 " />
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

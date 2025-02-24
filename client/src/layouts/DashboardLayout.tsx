@@ -16,11 +16,11 @@ const DashboardLayout: React.FC = () => {
   if (!isLoaded) return "Loading...";
 
   return (
-    <div className="flex  gap-12 pt-5 h-full">
-      <div className="flex-1">
+    <div className="flex  gap-6 pt-5 h-full">
+      <div>
         <ChatList />
       </div>
-      <div className="flex-4 bg-[#12101b]">
+      <div className="flex-1 bg-[#0D0F10] rounded-2xl">
         <Outlet />
       </div>
     </div>

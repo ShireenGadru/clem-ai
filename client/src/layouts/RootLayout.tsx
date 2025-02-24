@@ -14,11 +14,14 @@ const RootLayout = () => {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <QueryClientProvider client={queryClient}>
+     
         <div className="flex flex-col px-16 py-4 h-screen">
           <header className="flex items-center justify-between">
-            <Link to="/" className="flex items-center font-bold gap-2">
+            <Link to="/" className="flex items-center font-bold gap-2 ">
               <img src="/logo.png" alt="logo" className="w-8 h-8" />
-              <span>CLEM AI</span>
+              <span className="bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent">
+                CLEM AI
+              </span>
             </Link>
             <div>
               <SignedIn>

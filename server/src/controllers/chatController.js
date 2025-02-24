@@ -116,7 +116,7 @@ const getChatList = asyncHandler(async (req, res) => {
 const updateChatHistory = asyncHandler(async (req, res) => {
   try {
     const { userId } = getAuth(req);
-    const { question, answer, img } = req.body;
+    const { question, answer, img, category } = req.body;
 
     const userItem = {
       role: "user",
@@ -126,6 +126,7 @@ const updateChatHistory = asyncHandler(async (req, res) => {
         },
       ],
       ...(img && { img }),
+      category,
     };
     const botItem = {
       role: "model",
@@ -134,6 +135,7 @@ const updateChatHistory = asyncHandler(async (req, res) => {
           text: answer,
         },
       ],
+      category,
     };
 
     const newItems = [...(question ? [userItem] : []), botItem];

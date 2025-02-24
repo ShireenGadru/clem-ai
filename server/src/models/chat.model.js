@@ -25,6 +25,13 @@ const chatSchema = new mongoose.Schema(
           type: String,
           required: false,
         },
+        category: {
+          type: String,
+          default: "other",
+        },
+        createdAt: {
+          type: Date,
+        },
       },
     ],
   },
