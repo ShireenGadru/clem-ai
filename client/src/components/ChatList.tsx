@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import useWindowWidth from "../hooks/useWindowWidth";
 
 const APIendpoint = import.meta.env.VITE_API_URL;
 
 const ChatList: React.FC = () => {
-  const [showSidebar, setShowSidebar] = useState<boolean>(true);
-
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const isLargeScreen = useWindowWidth(1000);
   const {
     isLoading,
     error,
@@ -46,7 +47,11 @@ const ChatList: React.FC = () => {
           <span className="font-semibold text-[10px] my-2.5 ">
             RECENT CHATS
           </span>
-          <div className="flex flex-col overflow-auto ">
+          <div
+            className={`flex flex-col overflow-auto ${
+              !isLargeScreen && "max-h-[300px]"
+            }`}
+          >
             {isLoading && <div>Loading....</div>}
             {error && <div>Somethign went wrong</div>}
 
@@ -61,7 +66,7 @@ const ChatList: React.FC = () => {
                 </Link>
               ))}
           </div>
-          <div className="mt-auto flex items-center gap-2.5 text-xs">
+          <div className="mt-auto pt-4 flex items-center gap-2.5 text-xs">
             <img src="/logo.png" alt="" className="w-6 h-6" />
             <div className="flex flex-col">
               <span className="font-semibold bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent">
