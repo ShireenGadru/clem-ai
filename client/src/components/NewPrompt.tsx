@@ -5,6 +5,7 @@ import model from "../lib/gemini";
 import Markdown from "react-markdown";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ImgData, INewPromptProps } from "../types/data.types";
+import { Part } from "@google/generative-ai";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const APIendpoint = import.meta.env.VITE_API_URL;
@@ -22,14 +23,10 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
 
   const chat = model.startChat({
     history: [
-      {
-        role: "user",
-        parts: [{ text: "Hello" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Great to meet you. What would you like to know?" }],
-      },
+      data?.history.map(({ role, parts }: { role: string; parts: Part[] }) => ({
+        role,
+        parts: [{ text: parts[0].text }],
+      })),
     ],
   });
 
