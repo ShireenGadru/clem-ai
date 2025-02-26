@@ -1,6 +1,7 @@
 # Clem AI
 
 A full-stack chatbot application with user authentication powered by Google's Gemini 1.5 Flash model.
+### 🔴 Live: https://clem-ai.onrender.com/
 
 ## Tech Stack
 
