@@ -4,7 +4,7 @@ A full-stack chatbot application with user authentication powered by Google's Ge
 
 ## Tech Stack
 
-- **Frontend**: React, TypeScript, Clerk, TanStack Query
+- **Frontend**: React, TypeScript, Tailwind, Clerk, TanStack Query
 - **Backend**: Node.js, Express, MongoDB
 - **AI**: Google Gemini 1.5 Flash model
 
