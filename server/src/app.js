@@ -3,7 +3,7 @@ import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import chatRouter from "./routes/chatRouter.js";
 import path from "path";
-import url from "url";
+import url, { fileURLToPath } from "url";
 
 const app = express();
 
