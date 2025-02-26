@@ -25,7 +25,11 @@ const Upload: React.FC<IUploadProps> = (props) => {
   };
 
   const onUploadStart = (e: any) => {
+    
+    
     const file = e.target.files[0];
+    console.log("here",file);
+
     const reader = new FileReader();
     reader.onloadend = () => {
       setImg((prev) => ({
@@ -39,6 +43,7 @@ const Upload: React.FC<IUploadProps> = (props) => {
         },
       }));
     };
+    
     reader.readAsDataURL(file);
   };
 
@@ -68,7 +73,7 @@ const Upload: React.FC<IUploadProps> = (props) => {
           className="rounded-full border-none bg-[#605e68] p-2.5 flex items-center justify-center cursor-pointer"
           onClick={handleUpload}
         >
-          <img src="/attachment.png" alt="" className="w-4 h-4 " />
+          <img src="/attachment.png" alt="" className="w-3 h-3 md:w-4 md:h-4" />
         </label>
       }
     </IKContext>

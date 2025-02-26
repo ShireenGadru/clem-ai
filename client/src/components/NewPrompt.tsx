@@ -36,9 +36,9 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   const endRef = useRef<HTMLDivElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  useEffect(() => {
-    if (endRef?.current) endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [data, question, answer, img]);
+  // useEffect(() => {
+  //   if (endRef?.current) endRef.current.scrollIntoView({ behavior: "smooth" });
+  // }, [data, question, answer, img]);
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -121,10 +121,11 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
     if (data?.history?.length === 1) {
       add(data.history[0].parts[0].text, true);
     }
+    console.log(endRef?.current);
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col">
       {img.isLoading && "Loading...."}
       {img.dbData?.filePath && (
         <IKImage
@@ -146,11 +147,11 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
         </div>
       )}
 
-      <div className="pb-27" ref={endRef} />
+      <div className="pb-4" ref={endRef} />
 
       <form
         action=""
-        className="w-1/2 mb-5 absolute bottom-0 bg-[#131619] rounded-[20px] flex items-center gap-5 px-5 border border-white/40"
+        className="md:mb-5 bg-[#131619] rounded-[20px] flex items-center gap-5 px-5 border border-white/40"
         onSubmit={handleSubmit}
         ref={formRef}
       >
@@ -159,11 +160,11 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
         <input
           type="text"
           name="text"
-          placeholder="Ask me anything..."
-          className="flex-1 p-5 bg-transparent border-none outline-none text-[#ececec]"
+          placeholder="Ask something..."
+          className="flex-1 py-3 md:p-5 bg-transparent border-none outline-none text-[#ececec] text-xm md:text-base"
         />
-        <button className="mr-5 cursor-pointer rounded-full border-none bg-[#605e68] p-2.5 flex items-center justify-center">
-          <img src="/arrow.png" alt="" className="w-4 h-4 " />
+        <button className="md:mr-5 cursor-pointer rounded-full border-none bg-[#605e68] p-2.5 flex items-center justify-center">
+          <img src="/arrow.png" alt="" className="w-3 h-3 md:w-4 md:h-4 " />
         </button>
       </form>
     </div>

@@ -1,20 +1,30 @@
 .format {
-   p {
+  p {
     margin: 15px 0;
-   }
-   strong {
+  }
+  strong {
     font-size: 18px;
     color: #2aaf6d;
-   }
-   pre {
+  }
+  pre {
     background-color: rgb(9, 9, 9);
     border: 1px solid rgba(75, 75, 75, 0.537);
     padding: 15px 10px;
     color: rgb(201, 201, 201);
     margin: 10px 0;
     border-radius: 10px;
-   }
-   li {
-      margin: 6px 0;
-   }
+    width: 100%;
+    white-space: pre-wrap; /* Allows wrapping */
+    word-wrap: break-word; /* Breaks long words */
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  li {
+    margin: 6px 0;
+  }
+
+  code {
+    font-family: monospace;
+    font-size: 14px;
+  }
 }

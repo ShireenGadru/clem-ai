@@ -35,7 +35,7 @@ const ChatList: React.FC = () => {
         className="flex items-end w-full justify-end cursor-pointer hover:invert-25"
         onClick={toggleSidebar}
       >
-        <img src="./menu.png" alt="" className="invert w-7 h-7" />
+        <img src="./menu.png" alt="" className="w-7 h-7" />
       </div>
       {showSidebar && (
         <>

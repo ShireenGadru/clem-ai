@@ -4,7 +4,7 @@ import { AnimatedBackground } from "../components/AnimatedBg";
 import useWindowWidth from "../hooks/useWindowWidth";
 
 const Homepage: React.FC = () => {
-  const showBackground = useWindowWidth(500);
+  const showBackground = useWindowWidth(600);
 
   return (
     <div className="flex items-center justify-center h-screen  px-6">
