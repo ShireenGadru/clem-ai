@@ -22,12 +22,12 @@ const NewPrompt: React.FC<INewPromptProps> = ({ data }) => {
   });
 
   const chat = model.startChat({
-    history: [
-      data?.history.map(({ role, parts }: { role: string; parts: Part[] }) => ({
+    history: data?.history.map(
+      ({ role, parts }: { role: string; parts: Part[] }) => ({
         role,
         parts: [{ text: parts[0].text }],
-      })),
-    ],
+      })
+    ),
   });
 
   const endRef = useRef<HTMLDivElement | null>(null);
